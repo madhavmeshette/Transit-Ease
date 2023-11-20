@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:transit_ease/screens/newmap.dart';
 
 Image logoWidget(String imageName) {
   return Image.asset(
@@ -69,3 +70,132 @@ Container signInSignUpButton(
   );
 }
 
+class BusInfoContainer extends StatelessWidget {
+  final String source;
+  final String destination;
+  final String busNumber;
+  final int crowCounter;
+
+  BusInfoContainer({
+    required this.source,
+    required this.destination,
+    required this.busNumber,
+    required this.crowCounter,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(16.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.3),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                Icons.directions_bus,
+                color: Colors.blue,
+                size: 24.0,
+              ),
+              SizedBox(width: 8.0),
+              Text(
+                'Bus Number: $busNumber',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.0,
+                  fontFamily: 'Poppins-Bold',
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 8.0),
+          Row(
+            children: [
+              Icon(
+                Icons.location_on,
+                color: Colors.green,
+                size: 20.0,
+              ),
+              SizedBox(width: 8.0),
+              Text(
+                'Source: $source',
+                style: TextStyle(
+                  fontSize: 14.0,
+                  fontFamily: 'Poppins-Bold',
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 4.0),
+          Row(
+            children: [
+              Icon(
+                Icons.location_on,
+                color: Colors.red,
+                size: 20.0,
+              ),
+              SizedBox(width: 8.0),
+              Text(
+                'Destination: $destination',
+                style: TextStyle(
+                  fontSize: 14.0,
+                  fontFamily: 'Poppins-Bold',
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 8.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Crowd Counter:',
+                style: TextStyle(
+                  fontSize: 14.0,
+                  fontFamily: 'Poppins-Bold',
+                ),
+              ),
+              Text(
+                '$crowCounter',
+                style: TextStyle(
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 16.0),
+          ElevatedButton.icon(
+            onPressed: () {
+              // Handle live tracking logic
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SSimepleMap()));
+            },
+            icon: Icon(Icons.location_on),
+            label: Text('Live Track Bus'),
+            style: ElevatedButton.styleFrom(
+              primary: Colors.deepPurpleAccent,
+              onPrimary: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
