@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:transit_ease/screens/book_ticket.dart';
 import 'package:transit_ease/screens/newmap.dart';
+import 'package:fl_chart/fl_chart.dart';
 
 Image logoWidget(String imageName) {
   return Image.asset(
@@ -136,6 +138,8 @@ class BusInfoContainer extends StatelessWidget {
                   fontFamily: 'Poppins-Bold',
                 ),
               ),
+              SizedBox(width: 8.0), // Add spacing
+              ProbabilityChart(crowCounter: crowCounter),
             ],
           ),
           SizedBox(height: 4.0),
@@ -178,24 +182,127 @@ class BusInfoContainer extends StatelessWidget {
             ],
           ),
           SizedBox(height: 16.0),
-          ElevatedButton.icon(
-            onPressed: () {
-              // Handle live tracking logic
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => SSimepleMap()));
-            },
-            icon: Icon(Icons.location_on),
-            label: Text('Live Track Bus'),
-            style: ElevatedButton.styleFrom(
-              primary: Colors.deepPurpleAccent,
-              onPrimary: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton.icon(
+                onPressed: () {
+                  // Handle live tracking logic
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SSimepleMap()));
+                },
+                icon: Icon(Icons.location_on),
+                label: Text('Live Track Bus'),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.deepPurpleAccent,
+                  onPrimary: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
               ),
-            ),
+              SizedBox(width: 8.0), // Add spacing between buttons
+              ElevatedButton.icon(
+                onPressed: () {
+                  // Handle live tracking logic
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => BookTicketScreen(
+                                busNumber: this.busNumber,
+                                source: this.source,
+                                destination: this.destination,
+                              )));
+                },
+                icon: Icon(Icons.airplane_ticket_outlined),
+                label: Text('Book Ticket'),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.deepPurpleAccent,
+                  onPrimary: Colors.white,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                ),
+              ),
+            ],
           ),
         ],
       ),
     );
+  }
+}
+
+class ProbabilityChart extends StatelessWidget {
+  final int crowCounter;
+
+  ProbabilityChart({required this.crowCounter});
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          'Seat Probability',
+          style: TextStyle(
+            fontSize: 16.0,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'Poppins-Bold',
+          ),
+        ),
+        SizedBox(height: 30.0),
+        Container(
+          width: 30.0,
+          height: 30.0,
+          child: PieChart(
+            PieChartData(
+              sectionsSpace: 0,
+              centerSpaceRadius: 10.0,
+              sections: _generatePieChartSections(),
+              borderData: FlBorderData(show: false),
+              pieTouchData: PieTouchData(
+                  touchCallback: (FlTouchEvent event, pieTouchResponse) {}),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  List<PieChartSectionData> _generatePieChartSections() {
+    int busCapacity = 60;
+    int availableSeats = busCapacity - crowCounter;
+    int occupiedSeats = crowCounter;
+
+    return [
+      PieChartSectionData(
+        color: Colors.green,
+        value: availableSeats.toDouble(),
+        title: '${_calculatePercentage(availableSeats, busCapacity)}%',
+        radius: 30.0,
+        titleStyle: const TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: Color(0xffffffff),
+        ),
+      ),
+      PieChartSectionData(
+        color: Colors.red,
+        value: occupiedSeats.toDouble(),
+        title: '${_calculatePercentage(occupiedSeats, busCapacity)}%',
+        radius: 30.0,
+        titleStyle: TextStyle(
+          fontSize: 16,
+          fontWeight: FontWeight.bold,
+          color: const Color(0xffffffff),
+        ),
+      ),
+    ];
+  }
+
+  int _calculatePercentage(int value, int total) {
+    if (total == 0) {
+      return 0;
+    }
+    return ((value / total) * 100).round();
   }
 }

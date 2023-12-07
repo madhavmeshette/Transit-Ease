@@ -16,6 +16,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final TextEditingController _userNameTextController = TextEditingController();
   final TextEditingController _passwordTextController = TextEditingController();
   final TextEditingController _emailTextController = TextEditingController();
+  final TextEditingController _vehicleSegment = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -27,6 +28,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
           "Sign Up",
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
+        backgroundColor: Colors.purpleAccent,
       ),
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -62,6 +64,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
                 reusableTextField("Enter Password", Icons.lock_outline, true,
                     _passwordTextController),
+                const SizedBox(
+                  height: 20,
+                ),
+                reusableTextField("Vehicle Owned", Icons.local_car_wash_rounded,
+                    true, _vehicleSegment),
                 const SizedBox(
                   height: 20,
                 ),

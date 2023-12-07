@@ -1,7 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:transit_ease/reusable_widgets/reusable_widgets.dart';
+import 'package:transit_ease/screens/chat.dart';
+import 'package:transit_ease/screens/feedback_screen.dart';
 import 'package:transit_ease/screens/map.dart';
+import 'package:transit_ease/screens/settings_screen.dart';
 import 'package:transit_ease/screens/signin_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -26,10 +29,21 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          "Home Screen",
-          style: TextStyle(
-              color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              "Home Screen",
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(
+                width: 80), // Add some space between the title and coin symbol
+            buildCoinSymbol(),
+          ],
         ),
         centerTitle: true,
         actions: [
@@ -61,33 +75,34 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: SimpleMap(),
               ),
               BusInfoContainer(
-                source: 'Source Location',
-                destination: 'Final Destination',
-                busNumber: '123',
+                source: 'Wagholi',
+                destination: 'Pune station',
+                busNumber: '48',
                 crowCounter: 25,
               ),
               const SizedBox(
                 height: 20,
               ),
               BusInfoContainer(
-                source: 'Source Location',
-                destination: 'Final Destination',
-                busNumber: '321',
+                source: 'Shivaji nagar',
+                destination: 'Viman nagar',
+                busNumber: '69',
                 crowCounter: 50,
               ),
               const SizedBox(
                 height: 20,
               ),
               BusInfoContainer(
-                source: 'Source Location',
-                destination: 'Final Destination',
-                busNumber: '124',
+                source: 'Wagholi',
+                destination: 'Katraj',
+                busNumber: '96',
                 crowCounter: 40,
               ),
             ],
           ),
         ),
       ),
+      floatingActionButton: buildNavigateButton(),
     );
   }
 
@@ -168,6 +183,19 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  Widget buildNavigateButton() => FloatingActionButton.extended(
+      icon: const Icon(Icons.chat),
+      label: const Text('ChatBot-AI'),
+      backgroundColor: Colors.green,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      onPressed: () {
+        print('pressed');
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ChatPage()),
+        );
+      });
+
   Widget buildDrawerItem(
       {required IconData icon, required String text, required Function onTap}) {
     return ListTile(
@@ -190,12 +218,18 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void handleProfileSettings(BuildContext context) {
     Navigator.pop(context);
-    // Add your navigation logic here
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SettingsScreen()),
+    );
   }
 
   void handleFeedback(BuildContext context) {
     Navigator.pop(context);
-    // Add your feedback logic here
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => FeedbackScreen()),
+    );
   }
 
   void handleHelp(BuildContext context) {
@@ -240,7 +274,7 @@ class _HomeScreenState extends State<HomeScreen> {
         decoration: InputDecoration(
           hintText: hintText,
           border: InputBorder.none,
-          icon: Icon(Icons.location_on),
+          icon: const Icon(Icons.location_on),
         ),
       ),
     );
@@ -248,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 Widget buildDrawerHeader() {
-  return DrawerHeader(
+  return const DrawerHeader(
     decoration: BoxDecoration(
       color: Colors.blue,
     ),
@@ -260,6 +294,35 @@ Widget buildDrawerHeader() {
         fontFamily: 'Poppins',
         fontWeight: FontWeight.bold,
       ),
+    ),
+  );
+}
+
+// Add this function to create the coin symbol
+Widget buildCoinSymbol() {
+  return Container(
+    padding: const EdgeInsets.all(8), // Adjust padding as needed
+    decoration: BoxDecoration(
+      color: const Color.fromARGB(255, 226, 212, 55),
+      borderRadius: BorderRadius.circular(4), // Adjust border radius as needed
+    ),
+    child: const Row(
+      children: [
+        Icon(
+          Icons.token_outlined, // You can change this to any money-related icon
+          color: Colors.black, // Set icon color to black
+          size: 20,
+        ),
+        SizedBox(width: 2), // Add some space between the icon and the value
+        Text(
+          '100',
+          style: TextStyle(
+            color: Colors.black, // Set text color to black
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
+          ),
+        ),
+      ],
     ),
   );
 }
